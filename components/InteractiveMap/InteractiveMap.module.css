@@ -1,0 +1,145 @@
+.mapContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (prefers-color-scheme: light) {
+  .mapContainer {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.mapWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background-color: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  /* Coupe ce qui dépasse, comme l'échelle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-color-scheme: light) {
+  .mapWrapper {
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+  }
+}
+
+
+.carteSvg {
+  width: 90%;
+  /* Occupe 90% de la largeur */
+  height: 90%;
+  /* Occupe 90% de la hauteur */
+  object-fit: contain;
+  /* Garde le ratio réel sans déformer */
+  pointer-events: none;
+  filter: invert(1) brightness(0.8);
+  opacity: 0.7;
+}
+
+@media (prefers-color-scheme: light) {
+  .carteSvg {
+    filter: none;
+    opacity: 0.5;
+  }
+}
+
+.point {
+  /* Le point doit être relatif au wrapper, pas au SVG */
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 20;
+  /* On ajuste ici pour centrer le point sur l'endroit visé */
+  transform: translate(-50%, -50%);
+}
+
+@media (prefers-color-scheme: light) {
+  .point {
+    background-color: #000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.point:hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-color-scheme: light) {
+  .point:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  padding: 1rem;
+  border-radius: 12px;
+  width: 200px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+@media (prefers-color-scheme: light) {
+  .tooltip {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+  }
+}
+
+.point:hover .tooltip {
+  opacity: 1;
+  transform: translate(-50%, -120%);
+}
+
+.tooltip img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.tooltip h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tooltip p {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}

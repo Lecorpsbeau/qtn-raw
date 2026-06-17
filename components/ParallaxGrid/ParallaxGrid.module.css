@@ -1,0 +1,105 @@
+.container {
+  width: 100%;
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  /* Pour avoir le rendu "colonne centrée", utilise 2 colonnes mais très proches */
+  grid-template-columns: repeat(2, 300px);
+  gap: 2rem;
+  /* Important : permet l'effet de profondeur */
+  perspective: 1000px;
+}
+
+.gridItem {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  /* Ratio portrait classique pour portfolio */
+  overflow: hidden;
+  border-radius: 12px;
+
+  /* Transformation pour l'effet de profondeur */
+  transform: rotateX(var(--rotate-x, 0deg)) scale(var(--scale, 1));
+  filter: blur(var(--blur, 0px));
+
+  /* Accélération matérielle */
+  transform: rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1)) translateY(var(--y, 0));
+}
+
+/* Style de l'image à l'intérieur */
+.gridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+}
+
+/* Version Mobile / Tablette pour éviter que les 3 colonnes soient trop écrasées */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* Passe à 2 colonnes sur tablette */
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+    /* 1 seule colonne sur téléphone */
+    gap: 2rem;
+  }
+
+  .gridItem {
+    width: 100%;
+    /* Reprend toute la largeur sur mobile */
+  }
+}
+
+.gridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.marquee {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 0;
+  /* Derrière la grille */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marqueeInner {
+  display: inline-block;
+  animation: scrollText 20s linear infinite;
+  font-size: 10vw;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.05);
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .marquee {
+    color: rgba(0, 0, 0, 0.03);
+  }
+}

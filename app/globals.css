@@ -1,0 +1,55 @@
+:root {
+  /* Ta nouvelle palette de couleurs "qtn.raw" */
+  --background: #0A0A0C;
+  /* Charcoal Obscur */
+  --foreground: #F5F5F7;
+  /* Off-White */
+  --lime: #CCFF00;
+  /* Vert Lime Électrique */
+  --technical: #2D2D34;
+  /* Gris Technique */
+
+  /* Layout & Grille */
+  --grid-gap: 2rem;
+  --card-radius: 0px;
+  /* Passé à 0px pour un effet brut/streetwear sans arrondis */
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+
+  /* Intégration de ta police principale (Plus Jakarta Sans) */
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/* Effet de sélection de texte personnalisé (Vert Lime) */
+::selection {
+  background-color: var(--lime);
+  color: var(--background);
+}
+
+/* Raccourcis utilitaires si tu veux utiliser les polices directement dans tes modules CSS */
+.font-title {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+}
