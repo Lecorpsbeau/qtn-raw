@@ -76,7 +76,7 @@ export default function ParallaxGrid() {
       {/* Texte lié au Scroll */}
       <div className={styles.marquee}>
         <div className={styles.marqueeInner}>
-          qtn.raw - the portfolio of raw - qtn.raw the portfolio of raw - qtn.raw the portfolio of raw - qtn.raw the portfolio of raw &nbsp;
+          qtn.raw - the portfolio of raw -  qtn.raw - the portfolio of raw - qtn.raw
         </div>
       </div>
 
