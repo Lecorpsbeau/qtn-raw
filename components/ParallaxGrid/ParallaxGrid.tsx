@@ -3,122 +3,102 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './ParallaxGrid.module.css';
 
-// Type pour les photos
-interface Photo {
-  id: string;
-  url: string;
-  title: string;
-}
-
 export default function ParallaxGrid() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  // Stocke les positions Y pour éviter le getBoundingClientRect dans le scroll
-  const itemPositions = useRef<number[]>([]);
+  const wrappersRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const photos: Photo[] = [
-    { id: '1', url: '/photos/IMG_0452 2.jpg', title: 'Paris Centre' },
-    { id: '2', url: '/photos/IMG_0456 2.jpg', title: 'Street' },
+  // J'utilise tes photos existantes, l'effet s'appliquera dessus
+  const photos = [
+    { id: '1', url: '/photos/IMG_0452_2.jpg', title: 'Paris Centre' },
+    { id: '2', url: '/photos/IMG_0456_2.jpg', title: 'Street' },
     { id: '3', url: '/photos/IMG_0459.jpg', title: 'Nature' },
-    { id: '4', url: '/photos/IMG_0468 2.jpg', title: 'Montmartre' },
-    { id: '5', url: '/photos/IMG_0482 2.jpg', title: 'Versailles' },
+    { id: '4', url: '/photos/IMG_0468_2.jpg', title: 'Montmartre' },
+    { id: '5', url: '/photos/IMG_0482_2.jpg', title: 'Versailles' },
     { id: '6', url: '/photos/IMG_0482.jpg', title: 'Auto' },
-    { id: '7', url: '/photos/IMG_0485 2.jpg', title: 'Architecture' },
-    { id: '8', url: '/photos/IMG_0485 2.jpg', title: 'Portrait' },
-    { id: '9', url: '/photos/IMG_1529 2.jpg', title: 'Urbain' },
-    { id: '10', url: '/photos/IMG_1530 2.jpg', title: 'Fontainebleau' },
-    { id: '11', url: '/photos/IMG_1538 2.jpg', title: 'Sport' },
-    { id: '12', url: '/photos/IMG_2836 2.jpg', title: 'Château' },
-    { id: '13', url: '/photos/IMG_7958 2.jpg', title: 'Voyage' },
+    { id: '7', url: '/photos/IMG_0484_2.jpg', title: 'Architecture' },
+    { id: '8', url: '/photos/IMG_0485_2.jpg', title: 'Portrait' },
+    { id: '9', url: '/photos/IMG_1529_2.jpg', title: 'Urbain' },
+    { id: '10', url: '/photos/IMG_1530_2.jpg', title: 'Fontainebleau' },
+    { id: '11', url: '/photos/IMG_1538_2.jpg', title: 'Sport' },
+    { id: '12', url: '/photos/IMG_2836_2.jpg', title: 'Château' },
+    { id: '13', url: '/photos/IMG_7958_2.jpg', title: 'Voyage' },
     { id: '14', url: '/photos/P1330206.JPG', title: 'Détails' },
-    { id: '15', url: '/photos/qtn.raw-2 2.jpg', title: 'Iconique' },
+    { id: '15', url: '/photos/qtn.raw-2_2.jpg', title: 'Iconique' },
   ];
 
   useEffect(() => {
-    // 1. Calculer les positions une fois au départ
-    const calculatePositions = () => {
-      itemPositions.current = itemsRef.current.map(item => {
-        if (!item) return 0;
-        return item.getBoundingClientRect().top + window.scrollY;
-      });
-    };
-
-    calculatePositions();
-    window.addEventListener('resize', calculatePositions);
-
     const updateParallax = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const centerY = scrollY + windowHeight / 2;
+      const vh = window.innerHeight;
+      const viewportCenter = vh / 2;
 
-      itemsRef.current.forEach((item, index) => {
-        if (!item) return;
+      wrappersRef.current.forEach((wrapper) => {
+        if (!wrapper) return;
 
-        // Récupérer la position pré-calculée
-        const itemTop = itemPositions.current[index];
-        const itemCenter = itemTop + 150; // Approximation de la hauteur
-        const distanceFromCenter = (itemCenter - centerY) / (windowHeight / 2);
+        // On mesure le conteneur parent (qui ne bouge pas avec la 3D)
+        const rect = wrapper.getBoundingClientRect();
+        const itemCenter = rect.top + rect.height / 2;
 
-        // On limite les calculs à ce qui est visible (Culling)
-        if (Math.abs(distanceFromCenter) > 1.5) return;
+        // Distance normalisée entre -1 (haut de l'écran) et 1 (bas de l'écran)
+        const dist = (itemCenter - viewportCenter) / viewportCenter;
+        const absDist = Math.abs(dist);
 
-        const absDistance = Math.abs(distanceFromCenter);
+        // --- MATHS DU CYLINDRE (Exactement comme la vidéo) ---
 
-        // ⚡️ CALCULS GPU-READY (Mise à jour des variables CSS)
+        // 1. Rotation X : Les images s'inclinent en haut et en bas
+        const rotateX = dist * -70; // 70 degrés d'angle max
 
-        // S'éloignent et se floutent :
-        // Scale : rétrécissent en s'éloignant du centre
-        const scale = Math.max(0.7, 1 - absDistance * 0.3);
-        // Translate Z : s'enfoncent dans la page
-        const z = -absDistance * 300; // px
-        // Blur : floutent en s'éloignant
-        const blur = Math.max(0, (absDistance - 0.4) * 12); // px
+        // 2. Traduction Z : Les images s'enfoncent dans le fond aux extrémités
+        const z = -Math.pow(absDist, 1.5) * 400; // Courbe douce pour repousser
 
-        // Mouvements pour look cinématique :
-        // Rotate X : inclinaison verticale
-        const rotateX = -distanceFromCenter * 25; // deg
-        // Rotate Y : inclinaison horizontale (inverse le signe selon colonne)
-        const rotateY = (index % 2 === 0 ? 1 : -1) * (distanceFromCenter * 15);
-        // Translate Y staggered : mouvement décalé
-        const staggerY = (index % 4) * 60 * (scrollY / 1000); // px
+        // 3. Scale : Légèrement plus petit sur les bords
+        const scale = Math.max(0.6, 1 - absDist * 0.2);
 
-        // Injection directe dans le style
-        item.style.setProperty('--scale', scale.toString());
-        item.style.setProperty('--z', `${z}px`);
-        item.style.setProperty('--blur', `${blur}px`);
-        item.style.setProperty('--rotate-x', `${rotateX}deg`);
-        item.style.setProperty('--rotate-y', `${rotateY}deg`);
-        item.style.setProperty('--stagger-y', `${staggerY}px`);
+        // 4. Opacité & Flou : Disparaissent aux extrémités
+        const opacity = Math.max(0, 1 - absDist * 0.8);
+        const blur = Math.max(0, (absDist - 0.2) * 10);
+
+        // On applique les variables CSS sur l'enfant (l'image)
+        const innerItem = wrapper.firstElementChild as HTMLElement;
+        if (innerItem) {
+          innerItem.style.setProperty('--rotate-x', `${rotateX}deg`);
+          innerItem.style.setProperty('--z', `${z}px`);
+          innerItem.style.setProperty('--scale', scale.toString());
+          innerItem.style.setProperty('--blur', `${blur}px`);
+          innerItem.style.setProperty('--opacity', opacity.toString());
+        }
       });
     };
 
-    // 2. Optimisation critique du scroll : requestAnimationFrame
     const onScroll = () => requestAnimationFrame(updateParallax);
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', calculatePositions);
-    };
+    // Initialisation au chargement
+    updateParallax();
+
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <div className={styles.container} ref={containerRef}>
-      {/* Marquee (Texte défilant) */}
+    <div className={styles.container}>
+      {/* Le texte défilant exact de la vidéo */}
       <div className={styles.marquee}>
         <div className={styles.marqueeInner}>
-          MIO SAKURAI — SHIN YAMAMOTO — MIO SAKURAI — SHIN YAMAMOTO —
+          SORA TAKAHASHI 空 高橋 AOI NAKAMURA 葵 中村 REN FUJIMOTO 蓮 藤本 MIO SAKURAI 澪 桜井 SHIN YAMAMOTO 真 山本
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          SORA TAKAHASHI 空 高橋 AOI NAKAMURA 葵 中村 REN FUJIMOTO 蓮 藤本 MIO SAKURAI 澪 桜井 SHIN YAMAMOTO 真 山本
         </div>
       </div>
 
+      {/* La Grille */}
       <div className={styles.grid}>
         {photos.map((photo, index) => (
           <div
             key={photo.id}
-            className={styles.gridItem}
-            ref={(el) => { itemsRef.current[index] = el; }}
+            className={styles.gridItemWrapper}
+            ref={(el) => { wrappersRef.current[index] = el; }}
           >
-            <img src={photo.url} alt={photo.title} loading="lazy" />
+            <div className={styles.gridItem}>
+              <img src={photo.url} alt={photo.title} loading="lazy" />
+            </div>
           </div>
         ))}
       </div>
