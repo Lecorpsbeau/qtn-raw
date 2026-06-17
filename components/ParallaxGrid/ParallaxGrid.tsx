@@ -17,21 +17,21 @@ export default function ParallaxGrid() {
   const itemPositions = useRef<number[]>([]);
 
   const photos: Photo[] = [
-    { id: '1', url: '/photos/IMG_0452_2.jpg', title: 'Paris Centre' },
-    { id: '2', url: '/photos/IMG_0456_2.jpg', title: 'Street' },
+    { id: '1', url: '/photos/IMG_0452 2.jpg', title: 'Paris Centre' },
+    { id: '2', url: '/photos/IMG_0456 2.jpg', title: 'Street' },
     { id: '3', url: '/photos/IMG_0459.jpg', title: 'Nature' },
-    { id: '4', url: '/photos/IMG_0468_2.jpg', title: 'Montmartre' },
-    { id: '5', url: '/photos/IMG_0482_2.jpg', title: 'Versailles' },
+    { id: '4', url: '/photos/IMG_0468 2.jpg', title: 'Montmartre' },
+    { id: '5', url: '/photos/IMG_0482 2.jpg', title: 'Versailles' },
     { id: '6', url: '/photos/IMG_0482.jpg', title: 'Auto' },
-    { id: '7', url: '/photos/IMG_0484_2.jpg', title: 'Architecture' },
-    { id: '8', url: '/photos/IMG_0485_2.jpg', title: 'Portrait' },
-    { id: '9', url: '/photos/IMG_1529_2.jpg', title: 'Urbain' },
-    { id: '10', url: '/photos/IMG_1530_2.jpg', title: 'Fontainebleau' },
-    { id: '11', url: '/photos/IMG_1538_2.jpg', title: 'Sport' },
-    { id: '12', url: '/photos/IMG_2836_2.jpg', title: 'Château' },
-    { id: '13', url: '/photos/IMG_7958_2.jpg', title: 'Voyage' },
+    { id: '7', url: '/photos/IMG_0485 2.jpg', title: 'Architecture' },
+    { id: '8', url: '/photos/IMG_0485 2.jpg', title: 'Portrait' },
+    { id: '9', url: '/photos/IMG_1529 2.jpg', title: 'Urbain' },
+    { id: '10', url: '/photos/IMG_1530 2.jpg', title: 'Fontainebleau' },
+    { id: '11', url: '/photos/IMG_1538 2.jpg', title: 'Sport' },
+    { id: '12', url: '/photos/IMG_2836 2.jpg', title: 'Château' },
+    { id: '13', url: '/photos/IMG_7958 2.jpg', title: 'Voyage' },
     { id: '14', url: '/photos/P1330206.JPG', title: 'Détails' },
-    { id: '15', url: '/photos/qtn.raw-2_2.jpg', title: 'Iconique' },
+    { id: '15', url: '/photos/qtn.raw-2 2.jpg', title: 'Iconique' },
   ];
 
   useEffect(() => {
