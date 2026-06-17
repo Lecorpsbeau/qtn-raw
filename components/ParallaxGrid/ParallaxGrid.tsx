@@ -76,8 +76,7 @@ export default function ParallaxGrid() {
       {/* Texte lié au Scroll */}
       <div className={styles.marquee}>
         <div className={styles.marqueeInner}>
-          SORA TAKAHASHI 空 高橋 AOI NAKAMURA 葵 中村 REN FUJIMOTO 蓮 藤本 MIO SAKURAI 澪 桜井 SHIN YAMAMOTO 真 山本 —&nbsp;
-          SORA TAKAHASHI 空 高橋 AOI NAKAMURA 葵 中村 REN FUJIMOTO 蓮 藤本 MIO SAKURAI 澪 桜井 SHIN YAMAMOTO 真 山本 —&nbsp;
+          qtn.raw - the portfolio of raw - qtn.raw the portfolio of raw - qtn.raw the portfolio of raw - qtn.raw the portfolio of raw &nbsp;
         </div>
       </div>
 
