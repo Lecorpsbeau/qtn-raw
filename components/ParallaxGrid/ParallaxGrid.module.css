@@ -1,78 +1,61 @@
 .container {
-  width: 100%;
-  padding: 4rem 2rem;
-  display: flex;
-  justify-content: center;
   position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 10rem 4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Crucial pour l'effet de profondeur */
+  perspective: 1000px;
 }
 
 .grid {
   display: grid;
-  /* Pour avoir le rendu "colonne centrée", utilise 2 colonnes mais très proches */
   grid-template-columns: repeat(2, 300px);
-  gap: 2rem;
-  /* Important : permet l'effet de profondeur */
-  perspective: 1000px;
+  /* Colonnes étroites, images droites */
+  gap: 3rem;
+  width: auto;
+  transform-style: preserve-3d;
+  z-index: 1;
 }
 
 .gridItem {
+  position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
   /* Ratio portrait classique pour portfolio */
   overflow: hidden;
   border-radius: 12px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
 
-  /* Transformation pour l'effet de profondeur */
-  transform: rotateX(var(--rotate-x, 0deg)) scale(var(--scale, 1));
+  /* ⚡️ OPTIMISATION GPU : ON FORCE LE RENDU PAR LA CARTE GRAPHIQUE */
+  will-change: transform, filter;
+  /* AUCUNE transition CSS, le JS gère la fluidité */
+  transition: none;
+
+  /* L'application des variables CSS calculées par le JS */
+  transform: translate3d(0, var(--stagger-y, 0), var(--z, 0)) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1));
+
   filter: blur(var(--blur, 0px));
-
-  /* Accélération matérielle */
-  transform: rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) scale(var(--scale, 1)) translateY(var(--y, 0));
-}
-
-/* Style de l'image à l'intérieur */
-.gridItem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-
-}
-
-/* Version Mobile / Tablette pour éviter que les 3 colonnes soient trop écrasées */
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    /* Passe à 2 colonnes sur tablette */
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr;
-    /* 1 seule colonne sur téléphone */
-    gap: 2rem;
-  }
-
-  .gridItem {
-    width: 100%;
-    /* Reprend toute la largeur sur mobile */
-  }
 }
 
 .gridItem img {
   width: 100%;
   height: 100%;
+  /* Empêche les déformations d'images */
   object-fit: cover;
   display: block;
 }
 
+/* Marquee (Texte défilant en fond) */
 .marquee {
   position: fixed;
   top: 50%;
   left: 0;
   width: 100%;
+  transform: translateY(-50%);
   pointer-events: none;
   z-index: 0;
   /* Derrière la grille */
@@ -82,9 +65,11 @@
 
 .marqueeInner {
   display: inline-block;
+  /* Animation CSS simple pour le défilé */
   animation: scrollText 20s linear infinite;
   font-size: 10vw;
   font-weight: 900;
+  /* Couleur discrète */
   color: rgba(255, 255, 255, 0.05);
 }
 
@@ -99,7 +84,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-  .marquee {
-    color: rgba(0, 0, 0, 0.03);
+  .marqueeInner {
+    color: rgba(0, 0, 0, 0.05);
   }
 }
